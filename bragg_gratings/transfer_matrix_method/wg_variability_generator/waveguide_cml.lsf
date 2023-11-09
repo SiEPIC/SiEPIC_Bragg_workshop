@@ -1,0 +1,73 @@
+#
+#    Waveguide compact model generator with variability
+#    see https://github.com/mustafacc/SiEPIC_Photonics_Package/ for documentation
+#
+#    Author: Mustafa Hammood   ; mustafa@siepic.com   ; mustafa@ece.ubc.ca
+#
+#    (c)2023
+
+w_start = 480e-9;
+w_stop = 520e-9;
+thickness_start = 210e-9;
+thickness_stop = 230e-9;
+N = 35; # size of the matrix
+
+width_arr = linspace(w_start, w_stop, N);
+thickness_device_arr = linspace(thickness_start, thickness_stop, N);
+compiledname = 'wg_variability';
+
+
+for(w=width_arr){
+    for(t=thickness_device_arr){
+        switchtolayout;
+        select('::model::');
+        wavelength_start = get('wavelength_start');
+        wavelength_stop = get('wavelength_stop');
+        wavelength_pts = get('wavelength_pts');
+        mode_number = get('mode_number');
+        #thickness_device = get('thickness_device');
+        ?width = get('width');
+        thickness_rib = get('thickness_rib');
+        
+        setnamed("::model",'wavelength_start', wavelength_start);
+        setnamed("::model",'wavelength_stop', wavelength_stop);
+        setnamed("::model",'mode_number', mode_number);
+        setnamed("::model",'thickness_device', t);
+        setnamed("::model",'width', w);
+
+        run;
+        
+        setanalysis('wavelength', wavelength_start);
+        setanalysis('stop wavelength',wavelength_stop);
+        setanalysis('number of points',wavelength_pts);
+        setanalysis('number of trial modes', mode_number);
+        n = findmodes;
+        selectmode(mode_number);
+        setanalysis("track selected mode",1);
+        setanalysis("detailed dispersion calculation",1);
+        
+        frequencysweep;
+        D=getdata("frequencysweep","D");
+        f=getdata("frequencysweep","f_D");
+        neff=abs(getdata("frequencysweep","neff"));
+        vg=abs(getdata("frequencysweep","vg"));
+        ng=c/vg;
+        
+        wavl = c/f;
+        fit_neff = polyfit(wavl,neff,2);
+        fit_ng = polyfit(wavl,ng,2);
+        # save compact model data fit to a text file
+        # file name: wg_WaveguideThickness_WaveguideWidth_RibThickness.txt
+        # data format: wavelength_start, wavelength_stop, effective index fit values
+
+        data_str = num2str(t)+','+num2str(w)+','+num2str(c/f(1))+','+num2str(c/f(end))+','+num2str(fit_neff(1))+','+num2str(fit_neff(2))+','+num2str(fit_neff(3));
+        name = 'wg_thickness'+num2str(thickness_device*1e9)+'nm_width'+num2str(width*1e9)+'nm';
+        #write(name+'.txt', data_str);
+        # save as an INTC LDF compact model
+        savedcard(name);
+
+        # append existing data file       
+        write(compiledname+'.txt', data_str);
+    
+    }
+}

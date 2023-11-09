@@ -1,0 +1,120 @@
+#
+#    Waveguide compact model generator for a waveguide coupler
+#    see https://github.com/mustafacc/SiEPIC_Photonics_Package/ for documentation
+#
+#    Author: Mustafa Hammood   ; mustafa@siepic.com   ; mustafa@ece.ubc.ca
+#    SiEPIC Kits Ltd. 2023     ; University of British Columbia
+#
+#    (c)2023
+
+res = 500;
+period = 318e-9;
+select('::model');
+
+wavelength_start = get('wavelength_start');
+wavelength_stop = get('wavelength_stop');
+wavelength_pts = get('wavelength_pts');
+pol = get('pol');
+thickness_device = get('thickness_device');
+width1 = get('width1');
+width2 = get('width2');
+thickness_rib = get('thickness_rib');
+
+setnamed("::model",'wavelength_start', wavelength_start);
+setnamed("::model",'wavelength_stop', wavelength_stop);
+setnamed("::model",'pol', pol);
+setnamed("::model",'width1', width1);
+setnamed("::model",'width2', width2);
+
+run;
+
+if( pol == 'TE' ){
+    mode_number = 2;
+    j = 1; #select modes 1,2
+}
+else{ # else if pol is TM...
+    mode_number = 4;
+    j = 3; #select modes 3,4
+}
+
+polyfitorder = 1;
+
+n_eff = matrix(wavelength_pts, 2);
+n_g = matrix(wavelength_pts, 2);
+n_eff_fit = matrix(polyfitorder+1, 2);
+n_g_fit = matrix(polyfitorder+1,2);
+n_eff_data = matrix(res,2);
+n_g_data = matrix(res, 2);
+
+setanalysis('wavelength', wavelength_start);
+setanalysis('stop wavelength',wavelength_stop);
+setanalysis('number of points',wavelength_pts);
+setanalysis('number of trial modes', mode_number);
+setanalysis("track selected mode",1);
+setanalysis("detailed dispersion calculation",1);
+leg = cell(4);
+for(i=j:mode_number) {
+    n=findmodes;     # calculate the modes     
+    selectmode(i);
+    frequencysweep;  # run frequency sweep 
+    n_eff(:, i) = abs(getdata("frequencysweep","neff"));
+    n_g(:,i) = c/abs(getdata("frequencysweep","vg"));
+    f=getdata("frequencysweep","f");
+    plot(c/f*1e6,n_eff(:,i),"Wavelength (um)", "Effective Index");
+    n_eff_fit(:,i) = polyfit(c/f,n_eff(:,i),polyfitorder);
+    n_g_fit(:,i) = polyfit(c/f(1:wavelength_pts),n_g(:,i),polyfitorder);
+    lambda = c/f;
+    lambda_fit = linspace(wavelength_start,wavelength_stop,res);
+    n_eff_data(:,i) = n_eff_fit(1,i)+n_eff_fit(2,i)*lambda_fit;    
+    n_g_data(:,i) = n_g_fit(1,i)+n_g_fit(2,i)*lambda_fit;
+    leg{i} = "Waveguide "+num2str(i);
+    holdon;
+}
+
+# export data to matlab data file
+filename = pol+"_w1_"+num2str(width1*1e9)+"nm_w2_"+num2str(width2*1e9)+"nm_thickness_"+num2str(thickness_device*1e9)+"nm";
+matlabsave(filename,n_eff_fit,n_g_fit,n_eff,n_g,lambda);
+
+# data format: wavelength_start, wavelength_stop, waveguide1 fit (2 coeffs.), waveguide2 fit (2 coeffs.)
+data_str = num2str(c/f(1))+','+num2str(c/f(end))+','+num2str(n_eff_fit(1))+','+num2str(n_eff_fit(2))+','+num2str(n_eff_fit(3))+','+num2str(n_eff_fit(4));
+write(filename+'.txt', data_str);
+
+
+modes = 2;
+# plot average effective index of the modes
+central_mode = 2;	# hi debugger
+n_eff_avg_data =  (n_eff_data(:,1)+n_eff_data(:,central_mode))/2;
+n_g_avg_data =  (n_g_data(:,1)+n_g_data(:,central_mode))/2;
+plot(lambda_fit*1e6, n_eff_avg_data);
+leg{modes+1} = "Average effective index";
+
+# find phase matching condition
+PhaseMatch = lambda_fit/(2*period);
+plot(lambda_fit*1e6, PhaseMatch);
+leg{modes+2} = "Grating period: "+num2str(period*1e9) +" nm";
+# add legend
+legend(leg);
+
+holdoff;
+
+# solve for contra-directional coupling wavelength and self coupling wavelengths
+tol = 0.001;
+
+contra_lambda = lambda_fit(find(abs(PhaseMatch -n_eff_avg_data)<tol));
+midindex = size(contra_lambda); midindex = midindex(1);
+contra_lambda = contra_lambda(midindex);
+# group index at contra-directional coupling wavelength (used for kappa analysis)
+ng0 = n_g_avg_data(midindex);
+
+self1_lambda = lambda_fit(find(abs(PhaseMatch -n_eff_data(:,1))<tol));
+midindex1 = size(self1_lambda); midindex1 = midindex1(1);
+self1_lambda = self1_lambda(midindex1);
+ng0_self1 = n_g_data(midindex1,1);
+
+self2_lambda = lambda_fit(find(abs(PhaseMatch -n_eff_data(:,central_mode))<tol));
+midindex2 = size(self2_lambda); midindex2 = midindex2(1);
+self2_lambda = self2_lambda(midindex2);
+ng0_self2 = n_g_data(midindex2,central_mode);
+
+
+?"Contra-directional coupling at: " + num2str(contra_lambda);

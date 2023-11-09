@@ -1,0 +1,30 @@
+#
+#    Bragg grating Lumerical simulation flow
+#    see https://github.com/mustafacc/SiEPIC_Photonics_Package/ for documentation
+#
+#    Author: Mustafa Hammood   ; mustafa@siepic.com   ; mustafa@ece.ubc.ca
+#    SiEPIC Kits Ltd. 2020     ; University of British Columbia
+#
+#    (c)2020
+
+#############################
+# Corrugation sweep         #
+#############################
+dc_arr = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+# define other device parameters in Bragg_EME.lsf
+
+size_arr = size(dc_arr); size_arr = size_arr(2);
+bandwidth_arr = matrix( size_arr, 1);
+lambda_arr = matrix (size_arr, 1);
+dutycycle = 0;
+
+for(k=1; k<=size_arr; k=k+1){
+    ?dutycycle = dc_arr(k);
+    MAIN_EME;
+    ?bandwidth_arr(k,1) = dropBandwidth_3dB;
+    ?lambda_arr(k,1) = centralWavelength;
+    switchtolayout;
+}
+closeall;
+plot(dc_arr, bandwidth_arr*1e9, 'Duty Cycle','3 dB Bandwidth (nm)');
+plot(dc_arr, lambda_arr*1e9, 'Duty Cycle','Central wavelength (nm)');
