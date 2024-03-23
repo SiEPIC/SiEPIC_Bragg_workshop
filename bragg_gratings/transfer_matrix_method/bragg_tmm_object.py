@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 09 03:38:47 2023
-
 @author: Mustafa Hammood
 """
 # %%
