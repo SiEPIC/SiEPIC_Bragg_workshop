@@ -3,9 +3,7 @@
 #    see https://github.com/mustafacc/SiEPIC_Photonics_Package/ for documentation
 #
 #    Author: Mustafa Hammood   ; mustafa@siepic.com   ; mustafa@ece.ubc.ca
-#    SiEPIC Kits Ltd. 2023     ; University of British Columbia
-#
-#    (c)2023
+#    (c)2024
 
 res = 500;
 period = 318e-9;

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@author: mustafa hammood, 2023
+@author: mustafa hammood, 2024
 """
 import numpy as np
 import pya
@@ -198,6 +198,7 @@ class layout_bragg:
         self.bragg_cell = cell
 
     def add_to_layout(self, cell):
+        self.make()
         t = pya.Trans(pya.Trans.R270, 0, 0)
         x = -pya.CellInstArray(self.bragg_cell.cell_index(), t).bbox(self.ly).p1.x
         y = -pya.CellInstArray(self.bragg_cell.cell_index(), t).bbox(self.ly).p1.y
@@ -206,3 +207,36 @@ class layout_bragg:
         FloorplanLayer = self.bragg_cell.layout().layer(self.tech[self.layer_floorplan])
         cell.shapes(FloorplanLayer).insert(
             pya.Box(0, 0, self.bragg_cell.bbox().height(), self.bragg_cell.bbox().width()))
+
+if __name__ == '__main__':
+
+  from SiEPIC.utils import get_layout_variables
+  #from layout_bragg import layout_bragg
+  import numpy as np
+  TECHNOLOGY, lv, ly, cell = get_layout_variables()
+  
+  layout = layout_bragg(ly, TECHNOLOGY)
+  layout.cell_name = "bragg_c_te_uni"
+  layout.cell = cell
+  layout.io = "GC_TE_1550_8degOxide_BB"
+  layout.io_lib = "EBeam"
+  layout.bragg = "ebeam_bragg_apodized"
+  layout.bragg_lib = "EBeam_Beta"
+  layout.ybranch = "ebeam_y_1550"
+  layout.ybranch_lib = "EBeam"
+  layout.num_sweep = 20
+  layout.wavl = 1550
+  layout.pol = "TE"
+  layout.label = "device_bragg_strip"
+  layout.wg_type = "Strip TE 1550 nm, w=500 nm"
+  layout.label = "device_bragg_dWsweep"
+  layout.layer_floorplan = 'FloorPlan'
+  
+  layout.number_of_periods = 300
+  layout.grating_period = 0.320  # µm
+  layout.wg_width = 0.5  # µm
+  layout.corrugation_width = np.linspace(0.0, 0.12, layout.num_sweep)  # µm
+  layout.sinusoidal = False  # sinusoidal corrugations option
+  layout.a = 2.8  # gaussian apodization index
+
+  layout.add_to_layout(cell)

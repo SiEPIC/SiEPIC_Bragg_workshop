@@ -3,9 +3,7 @@
 #    see https://github.com/mustafacc/SiEPIC_Photonics_Package/ for documentation
 #
 #    Author: Mustafa Hammood   ; mustafa@siepic.com   ; mustafa@ece.ubc.ca
-#    University of British Columbia
-#
-#    (c)2023
+#    (c)2024
 
 newproject;
 save("Bragg_EME_sweep.fsp");
@@ -21,9 +19,9 @@ res = 1000; # number of simulation points
 
 pol = 'TE'; # simulaiton polarization 
 
-mesh_y = 5e-9;
-mesh_x = 15e-9;
-mesh_z = 10e-9;
+mesh_y = 15e-9;
+mesh_x = 25e-9;
+mesh_z = 25e-9;
 
 #############################
 # Device geometry           #
