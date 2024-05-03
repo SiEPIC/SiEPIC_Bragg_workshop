@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: Mustafa Hammood
-@adapted by: Bobby Zou
+@adapted by: Bobby Zou to add apodization
 """
 # %%
 

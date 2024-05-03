@@ -26,6 +26,6 @@ def plot_wg_data(data, lambda0=1550e-9):
     plt.show()
 
 if __name__ == "__main__":
-    file_path = r'C:/Users/zouha/Documents/GitHub/SiEPIC/SiEPIC_Bragg_workshop/bragg_gratings/transfer_matrix_method/wg_data/wg_variability_1550.txt'
+    file_path = r'wg_data/wg_variability_1550.txt'
     data = read_data(file_path)
     plot_wg_data(data, lambda0=1310e-9)
