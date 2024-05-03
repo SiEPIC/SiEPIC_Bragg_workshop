@@ -230,16 +230,25 @@ class bragg_wg:
         i = 0
         while i < self.N:
             # apodization paramater addon
-            profileFunction = math.exp( -0.5*(2*self.gaussianIndex*(i-self.N/2)/(self.N))**2 )
-            profile = self.dw*profileFunction
+            profileFunction = math.exp(-0.5*(2*self.gaussianIndex*(i-self.N/2)/(self.N))**2)
             
+            # From KLayout PCell "amf_bragg_apodized.py"
+            # "profile = int(round(self.corrugation_width/2/dbu))*profileFunction"
+            # Breaking down into setps from the above equation, I had to mimic the implmentation in KLayout but it is not necessary
+            profile = self.dw/2/1e-9
+            profile = int(round(profile))
+            profile = profile * profileFunction
 
-            dwidth_apodized = self.dw + profile
-            #dwidth_apodized = self.dw * profileFunction
-            total_width_1 = (self.width + dwidth_apodized/2)*1e6
-            total_width_2 = (self.width - dwidth_apodized/2)*1e6
-            #dwidth_apodized = self.dw
-            #print ((dwidth_apodized + self.width)*1e6)
+            # Get total dwidth
+            # Option 1 - No apodization
+            # dwidth_apodized = self.dw
+            
+            # Option 2 - With apodization
+            dwidth_apodized = (profile * 2 * 1e-9)
+            
+            # Calculate the total width of the bragg for sanity check
+            total_width_1 = (self.width + dwidth_apodized)*1e6
+            total_width_2 = (self.width - dwidth_apodized)*1e6
 
             n1_final = self.n1_param(wavl, dwidth_apodized, self.thickness, index)
             n2_final = self.n2_param(wavl, dwidth_apodized, self.thickness, index)
@@ -250,11 +259,9 @@ class bragg_wg:
             T_hw2 = self.HomoWG_Matrix(wavl, n2_final, l_final)
             T_is21 = self.IndexStep_Matrix(n2_final, n1_final)
             
-
             Tp1 = np.matmul(T_hw1, T_is12)
             Tp2 = np.matmul(T_hw2, T_is21)
             Tp = np.matmul(Tp1, Tp2)
-            # T.append(np.linalg.matrix_power(Tp, N_seg))
             T.append(Tp)
             i += 1
         if self.N == 1:
@@ -276,6 +283,15 @@ class bragg_wg:
         self.R, self.T = zip(
             *[self.Grating_RT(wavl, index) for index, wavl in enumerate(self.lambda_0)]
         )
+        import scipy.io
+
+        data_save = {
+            'R': self.R,
+            'T': self.T,
+            'lambda_0': self.lambda_0
+        }
+        # Save to a .mat file
+        scipy.io.savemat('braggResponse.mat', data_save)
 
     def visualize(self):
         import matplotlib.pyplot as plt
