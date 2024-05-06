@@ -67,7 +67,16 @@ class bragg_wg:
 
         # return -1.53519e19 * self.dw**2 + 2.2751e12 * self.dw
         # Adjusted to waveguide dimension 350nm x 220nm
-        return -6.37130e19 * self.dw**2 + 8.61915e12 * self.dw + 6.87012e3
+
+        # period = 265 nm
+        # return -8.90545e19 * self.dw ** 2 + 9.77165e12 * self.dw - 5.66549e3
+        
+        # period = 270 nm
+        return -6.62634e19 * self.dw ** 2 + 8.73236e12 * self.dw + 6.27178e3
+        
+        # period = 275 nm
+        # return -6.11280e19 * self.dw ** 2 + 8.57437e12 * self.dw + 9.04911e3
+
 
     @property
     def lambda_bragg(self):
@@ -79,7 +88,16 @@ class bragg_wg:
         return self.kappa * self.lambda_bragg / 2
 
     def n_delta_param(self, dwidth):
-        kappa = -6.37130e19 * dwidth ** 2 + 8.61915e12 * dwidth + 6.87012e3
+        
+        # period = 265 nm
+        # kappa = -8.90545e19 * dwidth ** 2 + 9.77165e12 * dwidth - 5.66549e3
+        
+        # period = 270 nm
+        kappa = -6.62634e19 * dwidth ** 2 + 8.73236e12 * dwidth + 6.27178e3
+        
+        # period = 275 nm
+        # kappa = -6.11280e19 * dwidth ** 2 + 8.57437e12 * dwidth + 9.04911e3
+        
         return kappa * self.lambda_bragg / 2
 
     @property
@@ -229,22 +247,26 @@ class bragg_wg:
         T = []
         i = 0
         while i < self.N:
-            # apodization paramater addon
-            profileFunction = math.exp(-0.5*(2*self.gaussianIndex*(i-self.N/2)/(self.N))**2)
             
-            # From KLayout PCell "amf_bragg_apodized.py"
-            # "profile = int(round(self.corrugation_width/2/dbu))*profileFunction"
-            # Breaking down into setps from the above equation, I had to mimic the implmentation in KLayout but it is not necessary
-            profile = self.dw/2/1e-9
-            profile = int(round(profile))
-            profile = profile * profileFunction
+            if self.gaussianIndex == 0:
+                dwidth_apodized = self.dw
+            else:
+                # apodization paramater addon
+                profileFunction = math.exp(-0.5*(2*self.gaussianIndex*(i-self.N/2)/(self.N))**2)
+                
+                # From KLayout PCell "amf_bragg_apodized.py"
+                # "profile = int(round(self.corrugation_width/2/dbu))*profileFunction"
+                # Breaking down into setps from the above equation, I had to mimic the implmentation in KLayout but it is not necessary
+                profile = self.dw/2/1e-9
+                profile = int(round(profile))
+                profile = profile * profileFunction
 
-            # Get total dwidth
-            # Option 1 - No apodization
-            # dwidth_apodized = self.dw
-            
-            # Option 2 - With apodization
-            dwidth_apodized = (profile * 2 * 1e-9)
+                # Get total dwidth
+                # Option 1 - No apodization
+                # dwidth_apodized = self.dw
+                
+                # Option 2 - With apodization
+                dwidth_apodized = (profile * 2 * 1e-9)
             
             # Calculate the total width of the bragg for sanity check
             total_width_1 = (self.width + dwidth_apodized)*1e6
@@ -305,20 +327,21 @@ class bragg_wg:
         ax.plot(
             self.lambda_0 * 1e9,
             10 * np.log10(self.T),
-            label="Transmission",
+            label="Reflection",
             color="blue",
         )
         ax.plot(
-            self.lambda_0 * 1e9, 10 * np.log10(self.R), label="Reflection", color="red"
+            self.lambda_0 * 1e9, 10 * np.log10(self.R), label="Transmission", color="red"
         )
         ax.set_ylabel("Response (dB)", color="black")
         ax.set_xlabel("Wavelength (nm)", color="black")
         ax.set_title("Calculated response of the structure using TMM (dB scale)")
+        ax.legend()
 
 
 if __name__ == "__main__":
     bragg = bragg_wg(
-        period=270e-9, dw=40e-9, N=300, width=350e-9, thickness=220e-9, gaussianIndex=2
+        period=270e-9, dw=10e-9, N=500, width=350e-9, thickness=220e-9, gaussianIndex=2
     )
     bragg.visualize()
 
