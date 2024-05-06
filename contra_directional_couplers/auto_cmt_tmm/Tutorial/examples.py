@@ -6,6 +6,7 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir) 
 os.chdir(parent_dir) 
+os.environ["QT_QPA_PLATFORM"] = "xcb"  # because lumerical's being weird in linux
 
 # import ContraDC module
 from ContraDC import *
@@ -129,9 +130,7 @@ def examples(num):
         device.gen_sparams() # this will create a ContraDC_sparams.dat file to import into INTC
 
 
-examples(5)
-
-    
+examples(6)
 
 
 # %%
