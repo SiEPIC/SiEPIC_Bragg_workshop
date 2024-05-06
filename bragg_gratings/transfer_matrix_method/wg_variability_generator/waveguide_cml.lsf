@@ -6,11 +6,12 @@
 #
 #    (c)2023
 
-w_start = 480e-9;
-w_stop = 520e-9;
+w_start = 320e-9;
+w_stop = 370e-9;
 thickness_start = 210e-9;
 thickness_stop = 230e-9;
 N = 35; # size of the matrix
+N = 10; # size of the matrix
 
 width_arr = linspace(w_start, w_stop, N);
 thickness_device_arr = linspace(thickness_start, thickness_stop, N);
@@ -25,7 +26,7 @@ for(w=width_arr){
         wavelength_stop = get('wavelength_stop');
         wavelength_pts = get('wavelength_pts');
         mode_number = get('mode_number');
-        #thickness_device = get('thickness_device');
+        thickness_device = get('thickness_device');
         ?width = get('width');
         thickness_rib = get('thickness_rib');
         
