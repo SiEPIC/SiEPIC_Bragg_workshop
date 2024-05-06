@@ -22,8 +22,8 @@ res = 1000; # number of simulation points
 pol = 'TE'; # simulaiton polarization 
 
 mesh_y = 5e-9;
-mesh_x = 35e-9;
-mesh_z = 35e-9;
+mesh_x = 85e-9;
+mesh_z = 85e-9;
 
 #############################
 # Device geometry           #
