@@ -4,7 +4,7 @@
 @adapted by: Bobby Zou to add apodization
 """
 # %%
-
+import os
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
@@ -90,7 +90,7 @@ class bragg_wg_1550:
     def normalize(value, min_value, max_value):
         return (value - min_value) / (max_value - min_value)
 
-    def neff_lookup(self, file_path="wg_data/wg_variability_1550.txt"):
+    def neff_lookup(self, file_path=os.path.join(os.path.dirname(__file__), "wg_data/wg_variability_1550.txt")):
         # load waveguide neff data from lookup table
         data = np.loadtxt(file_path, delimiter=",")
         points = data[:, :2]  # width and thickness
@@ -301,7 +301,7 @@ class bragg_wg_1310(bragg_wg_1550):
     def lambda_bragg(self):
         return 1305.72e-9
 
-    def neff_lookup(self, file_path="wg_data/wg_variability_1310.txt"):
+    def neff_lookup(self, file_path=os.path.join(os.path.dirname(__file__), "wg_data/wg_variability_1310.txt")):
         return super().neff_lookup(file_path=file_path)
 
 
