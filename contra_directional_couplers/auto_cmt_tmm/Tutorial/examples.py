@@ -82,7 +82,10 @@ def examples(num):
     """
     if num == 4:
 
-        device = ContraDC(polyfit_file="Tutorial/SiN_1550_TE_w1_850nm_w2_1150nm_thickness_400nm.txt", period=335e-9)
+        import os
+        current_dir = os.path.dirname(__file__)
+        polyfit_file_path = os.path.join(current_dir, "SiN_1550_TE_w1_850nm_w2_1150nm_thickness_400nm.txt")
+        device = ContraDC(polyfit_file=polyfit_file_path, period=335e-9)
         device.simulate().displayResults()
 
 
@@ -130,7 +133,7 @@ def examples(num):
         device.gen_sparams() # this will create a ContraDC_sparams.dat file to import into INTC
 
 
-examples(6)
+examples(1)
 
 
 # %%
