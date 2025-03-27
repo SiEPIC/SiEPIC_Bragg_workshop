@@ -1,3 +1,11 @@
+
+[tool.semantic_release]
+version_source = "tag"
+version_toml = ["pyproject.toml:project.version"]
+commit_parser = "angular"
+major_on_zero = true
+build_command = "mv auto_cmt_tmm siepic_contradc; python -m build; mv siepic_contradc auto_cmt_tmm"
+
 [build-system]
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -10,7 +18,7 @@ packages = [
 
 [project]
 name = "siepic_contradc"
-version = "0.1.0"
+version = "0.0.0"
 authors = [
   { name="Mustafa Hammood", email="mustafastation@gmail.com" },
 ]
