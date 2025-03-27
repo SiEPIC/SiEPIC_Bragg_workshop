@@ -30,7 +30,7 @@ jobs:
 
       - name: Run semantic-release
         run: semantic-release publish
-        working-directory: contra_directional_couplers
+#        working-directory: contra_directional_couplers
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
