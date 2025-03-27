@@ -32,6 +32,11 @@ jobs:
         run: |
           pip install build twine python-semantic-release
 
+      - name: Build manually (temporary debug)
+        run: ./make_PyPI
+          working-directory: contra_directional_couplers
+
+
       - name: Run semantic-release
         run: semantic-release publish
         env:
