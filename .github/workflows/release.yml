@@ -33,9 +33,9 @@ jobs:
           pip install build twine python-semantic-release
 
       - name: Run semantic-release
+        run: semantic-release publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        run: semantic-release publish
 
 
