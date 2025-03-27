@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+  "siepic_contradc",
+]
+
+
+[project]
+name = "siepic_contradc"
+version = "0.1.0"
+authors = [
+  { name="Mustafa Hammood", email="mustafastation@gmail.com" },
+]
+description = "Design of silicon photonic contra-directional grating-assisted couplers."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "SiEPIC>=0.5.20",
+  "SiEPIC_EBeam_PDK",
+  "numpy",
+  "packaging",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/SiEPIC/SiEPIC_Bragg_workshop"
+Issues = "https://github.com/SiEPIC/SiEPIC_Bragg_workshop/issues"
+

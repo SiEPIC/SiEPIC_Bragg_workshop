@@ -1,4 +1,5 @@
-# SiEPIC_Passives_2023
-SiEPIC Passives Workshop: Bragg grating devices and scripted layouts
+# SiEPIC Passives workshop
+SiEPIC Passives Workshop: Bragg grating and contra-directional coupler devices and scripted layouts
 
-[Presentation](https://docs.google.com/presentation/d/1MjksUD-i24wbDCKcai5WYoIXqr6su1NopOTiAQkaUUE/edit?usp=sharing)
+[Presentation, from SiEPIC-Passives-2023](https://docs.google.com/presentation/d/1MjksUD-i24wbDCKcai5WYoIXqr6su1NopOTiAQkaUUE/edit?usp=sharing)
+

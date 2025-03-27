@@ -1,0 +1,14 @@
+
+global-include *.py *.dat *.lsf *.txt *.svg 
+
+#graft siepic_ebeam_pdk/pymacros/opics_ebeam
+# prune siepic_ebeam_pdk/pymacros/SiEPIC-EBeam-competition
+
+prune siepic_contradc/Theory
+prune lumerical_waveguides_model
+prune lumerical_mode_eme
+prune lumerical_fdtd_bloch
+
+global-exclude *.py[cod] # for some reason this line adds all the other root folders
+
+prune dist

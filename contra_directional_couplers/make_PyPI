@@ -1,0 +1,8 @@
+mv auto_cmt_tmm siepic_contradc
+
+python3 -m build
+
+mv siepic_contradc auto_cmt_tmm
+
+
+#python3 -m twine upload -u __token__ -p ...
