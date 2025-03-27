@@ -19,7 +19,7 @@ packages = [
 
 [project]
 name = "siepic_contradc"
-version = "0.0.0"
+version = "0.1.0"
 authors = [
   { name="Mustafa Hammood", email="mustafastation@gmail.com" },
 ]
