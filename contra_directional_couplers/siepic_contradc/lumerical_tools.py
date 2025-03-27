@@ -23,7 +23,7 @@ else:
 
 
 # Application folder paths containing Lumerical
-p = [s for s in os.listdir(path_app) if "lumerical" in s]
+p = [s for s in os.listdir(path_app) if "lumerical" in s.lower()]
 # check sub-folders for lumapi.py
 import fnmatch
 for dir_path in p:
