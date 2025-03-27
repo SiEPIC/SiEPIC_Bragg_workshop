@@ -29,18 +29,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade build twine python-semantic-release
+          python -m pip install --upgrade pip
+          pip install build
 
-      - name: Bump version with semantic-release
-        run: semantic-release --config contra_directional_couplers/pyproject.toml version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: semantic-release:*
+      - name: Build package
+        run: |
+          cd contra_directional_couplers
+          ./make_PyPI
+          cp -a dist ..
 
-      - name: Publish release to PyPI and GitHub
-        run: semantic-release --config contra_directional_couplers/pyproject.toml publish
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-          DEBUG: semantic-release:*
-
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

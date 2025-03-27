@@ -1,19 +1,4 @@
 
-[tool.semantic_release]
-version_variable = "contra_directional_couplers/siepic_contradc/__init__.py:__version__"
-branch = "main"
-commit_parser = "conventional"
-git_root = ".."
-major_on_zero = true
-build_command = "./contra_directional_couplers/make_PyPI"
-#build_command = "./contra_directional_couplers/make_PyPI"
-upload_to_release = true
-upload_to_pypi = true
-
-[build-system]
-requires = ["setuptools>=61", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [tool.setuptools]
 packages = [
   "siepic_contradc",
@@ -22,7 +7,8 @@ packages = [
 
 [project]
 name = "siepic_contradc"
-version = "0.1.5"
+version = "0.1.2"
+dynamic = ["version"]
 authors = [
   { name="Mustafa Hammood", email="mustafastation@gmail.com" },
 ]
@@ -34,13 +20,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
 dependencies = [
   "SiEPIC>=0.5.23",
   "SiEPIC_EBeam_PDK",
   "numpy",
   "packaging",
 ]
-
 
 [project.urls]
 Homepage = "https://github.com/SiEPIC/SiEPIC_Bragg_workshop"
