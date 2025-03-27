@@ -2,7 +2,7 @@
 [tool.semantic_release]
 version_source = "tag"
 version_toml = ["pyproject.toml:project.version"]
-commit_parser = "angular"
+commit_parser = "conventional"
 major_on_zero = true
 build_command = "mv auto_cmt_tmm siepic_contradc; python -m build; mv siepic_contradc auto_cmt_tmm"
 
