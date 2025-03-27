@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.2.1 (2025-03-27)
+
+### Bug Fixes
+
+- Test release trigger
+  ([`c492be0`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/c492be022794bfb07e7ed98436cd3bc6c2a136ec))
+
+
 ## v0.2.0 (2025-03-27)
 
 ### Bug Fixes
