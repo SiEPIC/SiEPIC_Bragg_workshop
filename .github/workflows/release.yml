@@ -6,41 +6,35 @@ on:
       - main
 
 permissions:
-  contents: write
-  id-token: write
+  contents: write  # required for tagging and GitHub releases
+  id-token: write  # required for trusted PyPI publishing
 
 jobs:
   release:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: contra_directional_couplers  # 👈 tells each step where your project is
-
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # fetches all history and tags
+          fetch-depth: 0  # ensure tags are available
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
-          pip install build twine python-semantic-release
+          pip install --upgrade build twine python-semantic-release
 
-#      - name: Build manually (temporary debug)
-#        run: ./make_PyPI
-#        working-directory: contra_directional_couplers
-
+      - name: Make build script executable
+        run: chmod +x make_PyPI
+        working-directory: contra_directional_couplers
 
       - name: Run semantic-release
         run: semantic-release publish
+        working-directory: contra_directional_couplers
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-
-
