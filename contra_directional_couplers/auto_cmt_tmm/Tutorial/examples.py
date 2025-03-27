@@ -133,7 +133,11 @@ def examples(num):
         device.gen_sparams() # this will create a ContraDC_sparams.dat file to import into INTC
 
 
-examples(1)
+if __name__ == "__main__":
+    examples(1)
+
+
+
 
 
 # %%
