@@ -31,7 +31,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install build twine python-semantic-release
-          pip install "pydantic<2.6"  # still required for now
 
       - name: Run semantic-release
         env:
