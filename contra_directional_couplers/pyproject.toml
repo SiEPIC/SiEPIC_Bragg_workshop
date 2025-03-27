@@ -8,6 +8,7 @@ commit_parser = "conventional"
 git_root = ".."
 major_on_zero = true
 build_command = "./make_PyPI"
+upload_to_release = true
 
 [build-system]
 requires = ["setuptools>=61", "wheel"]
