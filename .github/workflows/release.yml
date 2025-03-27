@@ -32,13 +32,13 @@ jobs:
           pip install --upgrade build twine python-semantic-release
 
       - name: Bump version with semantic-release
-        run: semantic-release version --config contra_directional_couplers/pyproject.toml
+        run: semantic-release --config contra_directional_couplers/pyproject.toml version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: semantic-release:*
 
       - name: Publish release to PyPI and GitHub
-        run: semantic-release publish --config contra_directional_couplers/pyproject.toml
+        run: semantic-release --config contra_directional_couplers/pyproject.toml publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
