@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+cd contra_directional_couplers
+
 rm -rf dist
 rm -rf ../dist
 

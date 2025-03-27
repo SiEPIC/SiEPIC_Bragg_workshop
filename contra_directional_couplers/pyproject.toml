@@ -1,13 +1,12 @@
-log_level = "DEBUG"
-
 
 [tool.semantic_release]
 version_variable = "contra_directional_couplers/__init__.py:__version__"
 branch = "main"
 commit_parser = "conventional"
-# git_root = ".."
+git_root = ".."
 major_on_zero = true
-build_command = "./make_PyPI"
+build_command = "./contra_directional_couplers/make_PyPI"
+#build_command = "./contra_directional_couplers/make_PyPI"
 upload_to_release = true
 upload_to_pypi = true
 
