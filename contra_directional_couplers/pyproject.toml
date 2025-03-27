@@ -5,7 +5,7 @@ version_toml = ["pyproject.toml:project.version"]
 commit_parser = "conventional"
 git_root = ".."
 major_on_zero = true
-build_command = "./contra_directional_couplers/make_PyPI"
+build_command = "./make_PyPI"
 
 [build-system]
 requires = ["setuptools>=61", "wheel"]
