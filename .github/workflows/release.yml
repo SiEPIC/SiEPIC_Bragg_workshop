@@ -1,31 +1,25 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 permissions:
-  contents: write  # required for tagging and GitHub releases
-  id-token: write  # required for trusted PyPI publishing
+  contents: read
 
 jobs:
-  release:
-    if: |
-      startsWith(github.event.head_commit.message, 'feat:') ||
-      startsWith(github.event.head_commit.message, 'fix:')
+  deploy:
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # ensure tags are available
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
