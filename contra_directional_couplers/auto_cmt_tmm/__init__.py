@@ -1,1 +1,1 @@
-print("Python package: SiEPIC_ContraDC.")
+print("Python package: SiEPIC_ContraDC")
