@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.5 (2025-03-27)
+
+### Bug Fixes
+
+- Minor patch improvement
+  ([`7dc4aab`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/7dc4aabb38feb57c68818450e4fff13c55ab783c))
+
+
 ## v0.1.4 (2025-03-27)
 
 ### Bug Fixes
