@@ -34,7 +34,7 @@ jobs:
 
       - name: Build manually (temporary debug)
         run: ./make_PyPI
-          working-directory: contra_directional_couplers
+        working-directory: contra_directional_couplers
 
 
       - name: Run semantic-release
