@@ -1,3 +1,6 @@
-print("Python package: SiEPIC_ContraDC. ")
-#__version__ = "0.2.0"
+__version__ = "0.1.3"
 
+print("Python package: SiEPIC_ContraDC, v%s" % __version__)
+
+
+from . import ContraDC, modules, utils

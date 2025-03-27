@@ -4,10 +4,14 @@ packages = [
   "siepic_contradc",
 ]
 
+[tool.setuptools.dynamic]
+version = {attr = "siepic_contradc.__version__"}
+
 
 [project]
 name = "siepic_contradc"
-version = "0.1.2"
+#version = "0.1.2"
+dynamic = ["version"]
 authors = [
   { name="Mustafa Hammood", email="mustafastation@gmail.com" },
 ]

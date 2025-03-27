@@ -1,6 +1,6 @@
 #%%
-from modules import *
-from utils import *
+from .modules import *
+from .utils import *
 
 
 class ContraDC():
