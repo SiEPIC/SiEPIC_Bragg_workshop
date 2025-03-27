@@ -4,6 +4,7 @@ set -e
 mv auto_cmt_tmm siepic_contradc
 
 python3 -m build
+cp -a dist ..
 
 mv siepic_contradc auto_cmt_tmm
 
