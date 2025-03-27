@@ -28,13 +28,10 @@ jobs:
         run: |
           pip install --upgrade build twine python-semantic-release
 
-      - name: Make build script executable
-        run: chmod +x make_PyPI
-        working-directory: contra_directional_couplers
-
       - name: Run semantic-release
         run: semantic-release publish
         working-directory: contra_directional_couplers
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          DEBUG: semantic-release:*
