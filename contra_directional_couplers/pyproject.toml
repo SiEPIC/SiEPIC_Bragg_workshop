@@ -32,7 +32,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "SiEPIC>=0.5.22",
+  "SiEPIC>=0.5.23",
   "SiEPIC_EBeam_PDK",
   "numpy",
   "packaging",
