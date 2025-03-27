@@ -1,12 +1,28 @@
 # CHANGELOG
 
 
+## v0.4.0 (2025-03-27)
+
+
 ## v0.2.1 (2025-03-27)
 
 ### Bug Fixes
 
 - Test release trigger
   ([`c492be0`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/c492be022794bfb07e7ed98436cd3bc6c2a136ec))
+
+### Features
+
+- Test release trigger
+  ([`18ebda8`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/18ebda8d2cf83c8fedaead699fe24f07e374f87f))
+
+
+## v0.3.0 (2025-03-27)
+
+### Features
+
+- Test release trigger
+  ([`54baf1b`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/54baf1bf08b2d05c9a55807280f07391cffe5961))
 
 
 ## v0.2.0 (2025-03-27)
@@ -29,12 +45,6 @@
   ([`6b76970`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/6b76970999b895358b6ad3d5afe71ab304920b37))
 
 ### Features
-
-- Test release trigger
-  ([`18ebda8`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/18ebda8d2cf83c8fedaead699fe24f07e374f87f))
-
-- Test release trigger
-  ([`54baf1b`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/54baf1bf08b2d05c9a55807280f07391cffe5961))
 
 - Test release trigger
   ([`b3424d3`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/b3424d3401f73ab43c74bc21b9c70aa1936fb7e3))
@@ -147,17 +157,6 @@
 
 ## v0.1.0 (2025-03-27)
 
-### Features
-
-- Pypi
-  ([`68463b8`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/68463b8dc6431b2f07a4aab20d1c256255aed85f))
-
-- Python
-  ([`0cbc2c0`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/0cbc2c06b83d56670bb874acca9912ad132b533c))
-
-
-## v0.0.0 (2025-03-27)
-
 ### Bug Fixes
 
 - Example
@@ -166,4 +165,13 @@
 ### Features
 
 - Pypi
+  ([`68463b8`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/68463b8dc6431b2f07a4aab20d1c256255aed85f))
+
+- Pypi
   ([`0a36c96`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/0a36c96fb10b67877026f0a4f6228e2e0fa0387c))
+
+- Python
+  ([`0cbc2c0`](https://github.com/SiEPIC/SiEPIC_Bragg_workshop/commit/0cbc2c06b83d56670bb874acca9912ad132b533c))
+
+
+## v0.0.0 (2025-03-27)
