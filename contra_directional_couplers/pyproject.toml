@@ -2,8 +2,8 @@ log_level = "DEBUG"
 
 
 [tool.semantic_release]
-version_source = "tag"
-version_toml = ["pyproject.toml:project.version"]
+version_variable = "contra_directional_couplers/__init__.py:__version__"
+branch = "main"
 commit_parser = "conventional"
 git_root = ".."
 major_on_zero = true
