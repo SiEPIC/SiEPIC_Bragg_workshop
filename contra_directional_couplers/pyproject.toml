@@ -1,6 +1,6 @@
 
 [tool.semantic_release]
-version_variable = "contra_directional_couplers/__init__.py:__version__"
+version_variable = "contra_directional_couplers/siepic_contradc/__init__.py:__version__"
 branch = "main"
 commit_parser = "conventional"
 git_root = ".."
