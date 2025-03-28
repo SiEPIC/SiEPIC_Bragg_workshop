@@ -15,8 +15,12 @@ if platform.system() == 'Darwin':
     path_app = '/Applications'
 elif platform.system() == 'Linux':
     path_app = '/opt'
+    os.environ["QT_QPA_PLATFORM"] = "xcb" 
+    print('Linux Qt')
 elif platform.system() == 'Windows': 
     path_app = 'C:\\Program Files'
+    os.environ['QT_QPA_PLATFORM']= 'windows'
+    print('Windows Qt')
 else:
     print('Not a supported OS')
     exit()

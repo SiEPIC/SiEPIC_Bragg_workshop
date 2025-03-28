@@ -6,7 +6,6 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir) 
 os.chdir(parent_dir) 
-os.environ["QT_QPA_PLATFORM"] = "xcb"  # because lumerical's being weird in linux
 
 # import ContraDC module
 # from ContraDC import *
