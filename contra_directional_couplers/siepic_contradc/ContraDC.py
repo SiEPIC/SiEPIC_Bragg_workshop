@@ -493,7 +493,7 @@ class ContraDC():
 
         sio.savemat("ContraDC_sparams.mat", S)
 
-        from lumerical_tools import generate_dat
+        from .lumerical_tools import generate_dat
         generate_dat()
 
         return self
