@@ -52,13 +52,13 @@ print('Simulation project path: %s' % dir_path)
 
 def generate_dat(pol = 'TE', terminate = True):
     mode = lumapi.open('mode')
-    
+
     # feed polarization into model
     if pol == 'TE':
         lumapi.evalScript(mode,"mode_label = 'TE'; mode_ID = '1';")
     elif pol == 'TM':
         lumapi.evalScript(mode,"mode_label = 'TM'; mode_ID = '2';")
-        
+
     # run write sparams script
     lumapi.evalScript(mode,"cd('%s');"%dir_path)
     lumapi.evalScript(mode,'write_sparams;')

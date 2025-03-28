@@ -490,8 +490,11 @@ class ContraDC():
         S['S24'] = S24
         S['S34'] = S34
         S['S44'] = np.matrix.transpose(S44)
-
-        sio.savemat("ContraDC_sparams.mat", S)
+        import h5py
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        with h5py.File(os.path.join(current_dir, 'ContraDC_sparams.h5'), 'w') as f:
+            for key, value in S.items():
+                f.create_dataset(key, data=value)
 
         from .lumerical_tools import generate_dat
         generate_dat()

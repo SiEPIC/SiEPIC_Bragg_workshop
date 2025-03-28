@@ -128,8 +128,4 @@ def examples(num):
 if __name__ == "__main__":
     examples(5)
 
-
-
-
-
 # %%
