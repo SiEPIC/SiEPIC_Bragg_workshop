@@ -29,8 +29,7 @@ dependencies = [
   "SiEPIC_EBeam_PDK",
   "numpy",
   "packaging",
-  "matplotlib",
-  "PyQt5"
+  "matplotlib"
 ]
 
 [project.urls]
