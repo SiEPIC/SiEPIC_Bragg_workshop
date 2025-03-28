@@ -1,17 +1,8 @@
 #%% append Python path to code location
 import os,sys,inspect
 
-# change directory for database
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir) 
-os.chdir(parent_dir) 
-
-# import ContraDC module
-# from ContraDC import *
-
-from ..ContraDC import ContraDC
-from ..modules import *
+from siepic_contradc.ContraDC import ContraDC
+from siepic_contradc.modules import *
 
 def examples(num):
     """ Function implements 4 use-case examples """
@@ -135,7 +126,7 @@ def examples(num):
 
 
 if __name__ == "__main__":
-    examples(1)
+    examples(5)
 
 
 
