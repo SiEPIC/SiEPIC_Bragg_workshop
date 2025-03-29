@@ -501,16 +501,18 @@ class ContraDC():
 
         return self
 
-    def update_DesignKit_model(self, designkit='EBeam'):
+    def update_DesignKit_model(self, designkit='EBeam', model_source_folder='source_data/contraDC'):
         '''
-        Add the simulated s-parameters to the compact model library design kit'''
+        Add the simulated s-parameters to the compact model library design kit.
+        requires 'ContraDC_sparams.dat' in the path 
+        '''
         import os
         from .lumerical_tools import get_DesignKit
 
         # Get the destination path for the model data
         path = get_DesignKit(designkit)
-        path_contraDC = os.path.join(path,'source_data', 'contraDC')
-        filename = f'w1={self.w1[0]*1e9:.0f},w2={self.w2[0]*1e9:.0},dW1={self.dw1*1e9:.0f},dW2={self.dw2*1e9:.0f},gap={self.gap*1e9:.0f},p={self.period[0]*1e9:.1f},N={self.N},s=0,a={self.a:0.2f},rib={1 if self.rib else 0},pol={0 if self.pol=="TE" else 1},l1={self.wvl_range[0]*1e9:.0f},l2={self.wvl_range[1]*1e9:.0f},ln={self.N}.dat'
+        path_contraDC = os.path.join(path, model_source_folder)
+        filename = f'w1={self.w1[0]*1e9:.0f},w2={self.w2[0]*1e9:.0f},dW1={self.dw1*1e9:.0f},dW2={self.dw2*1e9:.0f},gap={self.gap*1e9:.0f},p={self.period[0]*1e9:.1f},N={self.N},s=0,a={self.a:0.2f},rib={1 if self.rib else 0},pol={0 if self.pol=="TE" else 1},l1={self.wvl_range[0]*1e9:.0f},l2={self.wvl_range[1]*1e9:.0f},ln={self.N}.dat'
         destination = os.path.join(path_contraDC, filename)
 
         # Get the source data file

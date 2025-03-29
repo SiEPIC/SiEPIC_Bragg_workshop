@@ -129,16 +129,40 @@ def examples(num):
     if num == 7:
 
         # instantiate, simulate and show result
-        device = ContraDC(wvl_range=[1499e-9, 1601e-9])
+        device = ContraDC(N=1000, period=322e-9, polyfit_file=None, a=10, apod_shape="gaussian",
+                 kappa=48000, T=300, resolution=500, N_seg=100, wvl_range=[1499e-9, 1601e-9],
+                 central_wvl=1550e-9, 
+                 alpha=10, w1=.56e-6, w2=.44e-6, dw1=50e-9, dw2=25e-9, gap=.1e-6,
+                 w_chirp_step=1e-9, period_chirp_step=2e-9, angle=85, 
+                 mat_device='Si (Silicon) - Dispersive & Lossless',
+                 thickness_device=.22e-6, thickness_rib=90e-9, rib=False, pol='TE')
         
         device.simulate().displayResults()
 
         # Update the INTERCONNECT model
-        device.update_DesignKit_model('EBeam')
+        filename = device.update_DesignKit_model('EBeam')
+        print(f'Sparameter data saved to: {filename}')
 
+    """ Example 12: O-Band SOI Contra-DC, simulate, update the INTERCONNECT Design Kit for the EBeam PDK  """
+    if num == 12:
+
+        # instantiate, simulate and show result
+        device = ContraDC(N=1000, period=291e-9, polyfit_file=None, a=10, apod_shape="gaussian",
+                 kappa=48000, T=300, resolution=500, N_seg=100, wvl_range=[1259e-9, 1361e-9],
+                 central_wvl=1310e-9, 
+                 alpha=10, w1=.56e-6, w2=.44e-6, dw1=50e-9, dw2=25e-9, gap=.1e-6,
+                 w_chirp_step=1e-9, period_chirp_step=2e-9, angle=85, 
+                 mat_device='Si (Silicon) - Dispersive & Lossless',
+                 thickness_device=.22e-6, thickness_rib=90e-9, rib=False, pol='TE')
+        
+        device.simulate().displayResults()
+
+        # Update the INTERCONNECT model
+        filename = device.update_DesignKit_model('EBeam')
+        print(f'Sparameter data saved to: {filename}')
 
 
 if __name__ == "__main__":
-    examples(5)
+    examples(12)
 
 # %%
