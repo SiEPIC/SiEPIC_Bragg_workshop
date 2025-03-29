@@ -1,5 +1,4 @@
 #clear;
-lambda= h5read('ContraDC_sparams.h5', 'lambda');
 
 S11= h5read('ContraDC_sparams.h5', 'S11');
 S12= h5read('ContraDC_sparams.h5', 'S12');
@@ -20,32 +19,13 @@ S44= h5read('ContraDC_sparams.h5', 'S44');
 lambda= h5read('ContraDC_sparams.h5', 'lambda');
 
 lambda = lambda*1e-9;
-f = transpose(c/lambda);
+f = (c/lambda);
 
 
 mode_label = "TE";
 mode_ID = "1";
 sfile = 'ContraDC_sparams.dat';
 
-S11 = transpose(S11);
-S21 = transpose(S21);
-S31 = transpose(S31);
-S41 = transpose(S41);
-
-S12 = transpose(S12);
-S22 = transpose(S22);
-S32 = transpose(S32);
-S42 = transpose(S42);
-
-S13 = transpose(S13);
-S23 = transpose(S23);
-S33 = transpose(S33);
-S43 = transpose(S43);
-
-S14 = transpose(S14);
-S24 = transpose(S24);
-S34 = transpose(S34);
-S44 = transpose(S44);
 
 # test passivity of S matrix
 make_plot=1;

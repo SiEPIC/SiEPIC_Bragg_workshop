@@ -139,6 +139,6 @@ def examples(num):
 
 
 if __name__ == "__main__":
-    examples(7)
+    examples(5)
 
 # %%
