@@ -125,7 +125,20 @@ def examples(num):
         device.gen_sparams() # this will create a ContraDC_sparams.dat file to import into INTC
 
 
+    """ Example 7: regular SOI Contra-DC, update the INTERCONNECT Design Kit for the EBeam PDK  """
+    if num == 7:
+
+        # instantiate, simulate and show result
+        device = ContraDC(wvl_range=[1499e-9, 1601e-9])
+        
+        device.simulate().displayResults()
+
+        # Update the INTERCONNECT model
+        device.update_DesignKit_model('EBeam')
+
+
+
 if __name__ == "__main__":
-    examples(5)
+    examples(7)
 
 # %%

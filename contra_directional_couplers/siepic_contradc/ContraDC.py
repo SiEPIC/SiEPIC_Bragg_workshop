@@ -86,7 +86,7 @@ class ContraDC():
     """
 
     def __init__(self, N=1000, period=322e-9, polyfit_file=None, a=10, apod_shape="gaussian",
-                 kappa=48000, T=300, resolution=500, N_seg=100, wvl_range=[1530e-9, 1580e-9],
+                 kappa=48000, T=300, resolution=500, N_seg=100, wvl_range=[1499e-9, 1601e-9],
                  central_wvl=1550e-9, alpha=10, w1=.56e-6, w2=.44e-6, dw1=50e-9, dw2=25e-9, gap=.1e-6,
                  w_chirp_step=1e-9, period_chirp_step=2e-9, angle=85, mat_device='Si (Silicon) - Dispersive & Lossless',
                  thickness_device=.22e-6, thickness_rib=90e-9, rib=False, pol='TE'):
@@ -500,6 +500,28 @@ class ContraDC():
         generate_dat()
 
         return self
+
+    def update_DesignKit_model(self, designkit='EBeam'):
+        '''
+        Add the simulated s-parameters to the compact model library design kit'''
+        import os
+        from .lumerical_tools import get_DesignKit
+
+        # Get the destination path for the model data
+        path = get_DesignKit(designkit)
+        path_contraDC = os.path.join(path,'source_data', 'contraDC')
+        filename = f'w1={self.w1[0]*1e9:.0f},w2={self.w2[0]*1e9:.0},dW1={self.dw1*1e9:.0f},dW2={self.dw2*1e9:.0f},gap={self.gap*1e9:.0f},p={self.period[0]*1e9:.1f},N={self.N},s=0,a={self.a:0.2f},rib={1 if self.rib else 0},pol={0 if self.pol=="TE" else 1},l1={self.wvl_range[0]*1e9:.0f},l2={self.wvl_range[1]*1e9:.0f},ln={self.N}.dat'
+        destination = os.path.join(path_contraDC, filename)
+
+        # Get the source data file
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        source = os.path.join(dir_path, 'ContraDC_sparams.dat')
+                              
+        # copy the file
+        import shutil
+        shutil.copyfile(source, destination )
+
+        return destination
 
     def getGroupDelay(self):
         """Calculates the group delay of the device,
