@@ -591,6 +591,227 @@ class ContraDC():
 
         return self
 
+    def layout(self, pdk='SiEPIC_EBeam_PDK'):    
+        import os
+        from packaging import version
+        from pya import Trans, CellInstArray, Text
+        import SiEPIC
+        from SiEPIC._globals import Python_Env
+        from SiEPIC.scripts import connect_pins_with_waveguide, zoom_out, export_layout
+        from SiEPIC.extend import to_itype
+
+        if pdk == "SiEPIC_EBeam_PDK":
+            if Python_Env == "Script":
+                try:
+                    # For external Python mode, when installed using pip install siepic_ebeam_pdk
+                    import siepic_ebeam_pdk
+                except:
+                    # Load the PDK from a folder, e.g, GitHub, when running externally from the KLayout Application
+                    import os, sys
+
+                    path_GitHub = os.path.expanduser("~/Documents/GitHub/")
+                    sys.path.append(os.path.join(path_GitHub, f"SiEPIC_EBeam_PDK/klayout"))
+                    import siepic_ebeam_pdk
+
+            tech_name = "EBeam"
+            component_contraDC = "contra_directional_coupler"
+            libname = "EBeam"
+            # Check if 1550 nm is in wavelength range
+            if (self.wvl_range[0] <= 1550e-9 <= self.wvl_range[1]):
+                waveguide_type = "Strip TE 1550 nm, w=500 nm"
+                gc_cell_name = "GC_TE_1550_8degOxide_BB"
+                wavl = 1550
+            elif (self.wvl_range[0] <= 1310e-9 <= self.wvl_range[1]):
+                waveguide_type = "Strip TE 1310 nm, w=350 nm"
+                gc_cell_name = "GC_TE_1310_8degOxide_BB"
+                wavl = 1310
+            else:
+                print(f"Warning: Design wavelength has no specific waveguide or optical IO. defaulting to 1550 nm parameters.")
+                waveguide_type = "Strip TE 1550 nm, w=500 nm"
+                gc_cell_name = "GC_TE_1550_8degOxide_BB"
+                wavl = 1550
+        class parameters:
+            """Define the circuit layout parameters"""
+            pol = "TE"
+            waveguide_type = "Strip TE 1550 nm, w=500 nm"
+            gc_pitch = 127  # spacing between grating couplers array (for a single device)
+            cdc_offset = 20
+            name = "contraDC"
+
+        params = parameters()
+
+        def import_fixed_cells(ly):
+            """Import the fixed cells from the library, and add them to the layout"""
+            params.cell_gc = ly.create_cell(
+                gc_cell_name, libname
+            )  
+            params.gc_length = 41  # Length of a grating coupler cell
+            params.gc_height = 30  # Height of a grating coupler cell
+
+
+        def contra_dc_cell(
+            topcell,
+            x_pos=0,
+            y_pos=0,
+            N=self.N,
+            period=self.period[0]*1e6,
+            g=self.gap*1e6,
+            w1=self.w1[0]*1e6,
+            w2=self.w2[0]*1e6,
+            dW1=self.dw1*1e6,
+            dW2=self.dw2*1e6,
+            sine=0,
+            a=self.a,
+        ):
+            # Create a sub-cell for our contraDC layout
+            cell = topcell.layout().create_cell("contraDC_GCarray")
+
+            # place the cell in the top cell
+            t = Trans(Trans.R0, x_pos, y_pos)
+            topcell.insert(CellInstArray(cell.cell_index(), t))
+            ly = topcell.layout()
+
+            # Grating couplers, Ports 1, 2, 3, 4 (top-down)
+            instGCs = []
+            for i in range(4):
+                t = Trans(
+                    Trans.R0,
+                    to_itype(params.gc_length, ly.dbu),
+                    to_itype(params.gc_height / 2 + i * params.gc_pitch, ly.dbu),
+                )
+                instGCs.append(cell.insert(CellInstArray(params.cell_gc.cell_index(), t)))
+            t = Trans(
+                Trans.R0,
+                to_itype(params.gc_length, ly.dbu),
+                to_itype(params.gc_height / 2 + params.gc_pitch * 2, ly.dbu),
+            )
+            text = Text(
+                f"opt_in_TE_{wavl}_device_{params.name}{N}N{1000*period}period{1000*g}g{1000*w1}wa{1000*w2}wb{1000*dW1}dwa{1000*dW2}dwb{sine}sine{a}a",
+                t,
+            )
+            # text = Text ("opt_in_TE_1550_device_contraDC1"
+            shape = cell.shapes(ly.layer(ly.TECHNOLOGY["Text"])).insert(text)
+            shape.text_size = 1.5 / ly.dbu
+
+            # contraDC PCell
+            pcell = ly.create_cell(
+                component_contraDC,
+                libname,
+                {
+                    "sbend": 1,
+                    "number_of_periods": N,
+                    "grating_period": period,
+                    "gap": g,
+                    "wg1_width": w1,
+                    "wg2_width": w2,
+                    "corrugation_width1": dW1,
+                    "corrugation_width2": dW2,
+                    "sinusoidal": sine,
+                    "index": a,
+                },
+            )
+            if not pcell:
+                raise Exception(
+                    f"Cannot find cell {component_contraDC} in library {libname}."
+                )
+            t = Trans(
+                Trans.R90,
+                to_itype(params.gc_length + params.cdc_offset, ly.dbu),
+                to_itype(params.gc_height / 2 + params.gc_pitch * 0.2, ly.dbu),
+            )
+            instCDC = cell.insert(CellInstArray(pcell.cell_index(), t))
+
+            # Waveguides:
+            connect_pins_with_waveguide(
+                instGCs[3], "opt1", instCDC, "opt3", waveguide_type=waveguide_type
+            )
+            connect_pins_with_waveguide(
+                instGCs[2],
+                "opt1",
+                instCDC,
+                "opt4",
+                waveguide_type=waveguide_type,
+                turtle_A=[5, 90, 30, -90],
+                turtle_B=[5, 90],
+            )
+            connect_pins_with_waveguide(
+                instGCs[1],
+                "opt1",
+                instCDC,
+                "opt2",
+                waveguide_type=waveguide_type,
+                turtle_A=[5, -90, 30, 90],
+                turtle_B=[5, -90],
+            )
+            connect_pins_with_waveguide(
+                instGCs[0], "opt1", instCDC, "opt1", waveguide_type=waveguide_type
+            )
+
+            return cell
+
+        def layout_contraDC_circuits(newlayout=True):
+            """
+            Generates contraDC circuits.
+            Either create a new layout using the specified pdk,
+                newlayout = True
+            or delete everything in the present layout
+                newlayout = False
+            """
+            from SiEPIC.verification import layout_check
+            from SiEPIC.utils.layout import new_layout, floorplan
+            from SiEPIC.utils import select_paths, get_layout_variables
+
+            """
+            Create a new layout using the EBeam technology, with a top cell
+            """
+            topcell, ly = new_layout(
+                tech_name,
+                f"SiEPIC_{tech_name}_contraDC_circuits",
+                GUI=True,
+                overwrite=not newlayout,
+            )
+
+            # Import the grating couplers, and other fixed cells
+            import_fixed_cells(ly)
+
+            # create a floor plan
+            # 605 x 410 microns is the space allocation for the edX course and openEBL
+            # https://siepic.ca/openebl/
+            floorplan(topcell, 605e3, 410e3)
+
+            # Create the contraDC circuits
+            contra_dc_cell(topcell)
+
+            # Zoom out
+            zoom_out(topcell)
+
+            # Save
+            path = os.path.dirname(os.path.realpath(__file__))
+            filename = "Contra_directional_coupler_layout"
+            file_out = export_layout(
+                topcell, path, filename, relative_path="..", format="oas", screenshot=False
+            )
+
+            print(f"{pdk}: - verification")
+
+            file_lyrdb = os.path.join(path, filename + ".lyrdb")
+            num_errors = layout_check(
+                cell=topcell, verbose=False, GUI=True, file_rdb=file_lyrdb
+            )
+
+            if Python_Env == "Script":
+                from SiEPIC.utils import klive
+
+                klive.show(file_out, lyrdb_filename=file_lyrdb, technology=tech_name)
+
+            if num_errors == 0:
+                print("Functional verification: Passed with 0 errors")
+            else:
+                print(f"Functional verification: Failed with {num_errors} errors")
+
+
+        layout_contraDC_circuits(newlayout=False)
+
     def getPerformance(self):
         """ Calculates a couple of basic performance figures of the contra-DC,
         such as center wavelength, bandwidth, maximum reflection, etc.
