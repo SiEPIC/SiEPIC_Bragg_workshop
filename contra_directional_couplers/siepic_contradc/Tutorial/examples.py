@@ -177,6 +177,7 @@ def examples(num):
 
     """ Example 13: Exporting design to a layout test structure"""
     if num == 13:
+        # Device's physical parameters, used for the layout
         apod_shape = "gaussian"
         period = 318e-9
         w1 = 560e-9
@@ -188,19 +189,17 @@ def examples(num):
 
         device = ContraDC(
             N=N,
-            w1=w1,
+            w1=[w1],
             dw1=dw1,
-            w2=w2,
+            w2=[w2],
             dw2=dw2,
             gap=gap,
             apod_shape=apod_shape,
-            period=period,
-            wvl_range=[1520e-9, 1580e-9],
+            period=[period],
         )
-        device.simulate().displayResults()
         device.layout(pdk="SiEPIC_EBeam_PDK")
 
 if __name__ == "__main__":
-    examples(12)
+    examples(13)
 
 # %%

@@ -591,7 +591,7 @@ class ContraDC():
 
         return self
 
-    def layout(self, pdk='SiEPIC_EBeam_PDK'):    
+    def layout(self, pdk='SiEPIC_EBeam_PDK', verification=False):    
         import os
         from packaging import version
         from pya import Trans, CellInstArray, Text
@@ -704,8 +704,8 @@ class ContraDC():
                     "gap": g,
                     "wg1_width": w1,
                     "wg2_width": w2,
-                    "corrugation_width1": dW1,
-                    "corrugation_width2": dW2,
+                    "corrugation1_width": dW1,
+                    "corrugation2_width": dW2,
                     "sinusoidal": sine,
                     "index": a,
                 },
@@ -749,7 +749,7 @@ class ContraDC():
 
             return cell
 
-        def layout_contraDC_circuits(newlayout=True):
+        def layout_contraDC_circuits(newlayout=True, verification=False):
             """
             Generates contraDC circuits.
             Either create a new layout using the specified pdk,
@@ -782,35 +782,35 @@ class ContraDC():
             # Create the contraDC circuits
             contra_dc_cell(topcell)
 
-            # Zoom out
-            zoom_out(topcell)
-
             # Save
             path = os.path.dirname(os.path.realpath(__file__))
             filename = "Contra_directional_coupler_layout"
-            file_out = export_layout(
-                topcell, path, filename, relative_path="..", format="oas", screenshot=False
-            )
+            file_out = os.path.join(path,filename+'.gds')
+            ly.write(file_out)
+            #file_out = export_layout(
+            #    topcell, path, filename, relative_path="..", format="oas", screenshot=False
+            #)
 
-            print(f"{pdk}: - verification")
+            if verification:
+                print(f"{pdk}: - verification")
 
-            file_lyrdb = os.path.join(path, filename + ".lyrdb")
-            num_errors = layout_check(
-                cell=topcell, verbose=False, GUI=True, file_rdb=file_lyrdb
-            )
+                file_lyrdb = os.path.join(path, filename + ".lyrdb")
+                num_errors = layout_check(
+                    cell=topcell, verbose=False, GUI=True, file_rdb=file_lyrdb
+                )
 
             if Python_Env == "Script":
                 from SiEPIC.utils import klive
+                if verification:
+                    klive.show(file_out, lyrdb_filename=file_lyrdb, technology=tech_name)
+                    if num_errors == 0:
+                        print("Functional verification: Passed with 0 errors")
+                    else:
+                        print(f"Functional verification: Failed with {num_errors} errors")
+                else:
+                    klive.show(file_out, technology=tech_name)
 
-                klive.show(file_out, lyrdb_filename=file_lyrdb, technology=tech_name)
-
-            if num_errors == 0:
-                print("Functional verification: Passed with 0 errors")
-            else:
-                print(f"Functional verification: Failed with {num_errors} errors")
-
-
-        layout_contraDC_circuits(newlayout=False)
+        layout_contraDC_circuits(newlayout=False, verification=verification)
 
     def getPerformance(self):
         """ Calculates a couple of basic performance figures of the contra-DC,
